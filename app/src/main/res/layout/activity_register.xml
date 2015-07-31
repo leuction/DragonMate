@@ -1,0 +1,100 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.example.shuowang.dragonmate.RegisterActivity">
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/R_UserNameText"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:hint="用户名" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/R_EmailText"
+        android:hint="邮箱"
+        android:layout_below="@+id/R_UserNameText"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:ems="10"
+        android:id="@+id/R_PhoneText"
+        android:layout_below="@+id/R_EmailText"
+        android:layout_centerHorizontal="true"
+        android:hint="手机" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/R_PasswordText"
+        android:layout_below="@+id/R_PhoneText"
+        android:layout_centerHorizontal="true"
+        android:hint="密码" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/R_PasswordCheckText"
+        android:layout_below="@+id/R_PasswordText"
+        android:layout_centerHorizontal="true"
+        android:hint="重复输入密码" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="性别"
+        android:id="@+id/textView"
+        android:layout_marginStart="30dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="注册"
+        android:id="@+id/R_RegisterButton"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="32dp" />
+
+    <RadioGroup
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/R_SexChoiceRadioGroup"
+        android:orientation="horizontal"
+        android:layout_alignTop="@+id/textView"
+        android:layout_alignParentEnd="true">
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="男"
+            android:id="@+id/R_MaleChoice"
+            android:checked="false" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="女"
+            android:id="@+id/R_FemaleChoice"
+            android:checked="false"/>
+
+
+    </RadioGroup>
+
+</RelativeLayout>
