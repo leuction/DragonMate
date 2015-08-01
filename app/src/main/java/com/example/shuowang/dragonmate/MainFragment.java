@@ -51,7 +51,11 @@ public class MainFragment extends Fragment {
                             objectId.add(myUser.getObjectId().toString());
                             trueName.add(myUser.getUsername().toString());
                             userInfo.add(myUser.getEmail().toString());
-                            avatar_url.add("http://media.g-cores.com/assets/logo-new-d7a8267cdc6871cd94c329f3a4676512.png");
+                            if (myUser.isAvatarInit()) {
+                                avatar_url.add(myUser.getAvatar().getFileUrl(getActivity()));
+                            } else {
+                                avatar_url.add("http://file.bmob.cn/M01/AB/44/oYYBAFW8UkWATmoPAACguaHH6So482.jpg");
+                            }
                         }
                         CustomList adapter = new CustomList(getActivity(), trueName, userInfo, avatar_url);
                         showList = (ListView) root.findViewById(R.id.list);

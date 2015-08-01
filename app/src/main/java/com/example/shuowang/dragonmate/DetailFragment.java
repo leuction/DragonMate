@@ -7,8 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,30 +19,37 @@ import java.util.List;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.GetListener;
 
 /**
  * Created by shuowang on 7/31/15.
  */
 public class DetailFragment extends Fragment{
     ListView infoList;
+    ImageView iv_avatar;
     List<String> items = null;
     String objectId;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_detail, container, false);
+        iv_avatar = (ImageView) root.findViewById(R.id.D_profile_image);
         infoList = (ListView) root.findViewById(R.id.D_InfoListView);
         items = new ArrayList<String>();
         objectId = getArguments().getString("objectId");
         BmobQuery<MyUser> query = new BmobQuery<MyUser>();
-        query.addWhereEqualTo("objectId",objectId);
-        query.findObjects(getActivity(), new FindListener<MyUser>() {
+        query.getObject(getActivity(), objectId, new GetListener<MyUser>() {
             @Override
-            public void onSuccess(List<MyUser> list) {
-                items.add("用户名："+list.get(0).getUsername().toString());
-                items.add("E-mail:"+list.get(0).getEmail().toString());
-                items.add("电话:"+list.get(0).getMobilePhoneNumber().toString());
-                items.add("性别："+sexTOString(list.get(0).itsSex()));
+            public void onSuccess(MyUser myUser) {
+                if (myUser.isAvatarInit()) {
+                    UrlImageViewHelper.setUrlDrawable(iv_avatar,myUser.getAvatar().getFileUrl(getActivity()));
+                } else {
+                    UrlImageViewHelper.setUrlDrawable(iv_avatar,"http://file.bmob.cn/M01/AB/44/oYYBAFW8UkWATmoPAACguaHH6So482.jpg");
+                }
+                items.add("用户名：" + myUser.getUsername().toString());
+                items.add("E-mail:" + myUser.getEmail().toString());
+                items.add("电话:" + myUser.getMobilePhoneNumber().toString());
+                items.add("性别：" + sexTOString(myUser.itsSex()));
                 infoList.setAdapter(new ArrayAdapter<String>(
                         getActivity(),
                         android.R.layout.simple_list_item_activated_1,
@@ -48,14 +58,10 @@ public class DetailFragment extends Fragment{
             }
 
             @Override
-            public void onError(int i, String s) {
+            public void onFailure(int i, String s) {
 
             }
         });
-
-
-
-
         return root;
     }
 

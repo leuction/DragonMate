@@ -16,11 +16,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.listener.GetListener;
 
 
 public class MainActivity extends BaseActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks{
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -31,11 +39,28 @@ public class MainActivity extends BaseActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+    private ImageView SL_iv_avatar,S_iv_avatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SL_iv_avatar = (ImageView) findViewById(R.id.SL_profile_image);
+        final MyUser currentUser = BmobUser.getCurrentUser(this, MyUser.class);
+        BmobQuery<MyUser> selfQuery = new BmobQuery<MyUser>();
+        selfQuery.getObject(this, currentUser.getObjectId(), new GetListener<MyUser>() {
+            @Override
+            public void onSuccess(MyUser myUser) {
+                UrlImageViewHelper.setUrlDrawable(SL_iv_avatar, myUser.getAvatar().getFileUrl(MainActivity.this));
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+            }
+        });
+
+
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -121,6 +146,9 @@ public class MainActivity extends BaseActivity
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
 
     /**
      * A placeholder fragment containing a simple view.

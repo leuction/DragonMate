@@ -1,31 +1,54 @@
 package com.example.shuowang.dragonmate;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
+
+import java.io.File;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.GetListener;
 import cn.bmob.v3.listener.UpdateListener;
+import cn.bmob.v3.listener.UploadFileListener;
 
 /**
  * Created by shuowang on 7/31/15.
  */
 public class AccountSettingFragment extends Fragment{
+
+    /**
+     * A pointer to the current callbacks instance (the Activity).
+     */
+
+    private static int RESULT_LOAD_IMAGE = 1;
     EditText et_email,et_phone;
     RadioGroup rg_sex;
     RadioButton rb_male,rb_female;
-    boolean sex;
+    ImageView iv_avatar,SL_iv_avatar;
+    boolean sex,avatarHasBeenChanged=false;
+    String path,path_url;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,15 +58,19 @@ public class AccountSettingFragment extends Fragment{
         rg_sex = (RadioGroup)root.findViewById(R.id.S_SexChoiceRadioGroup);
         rb_male = (RadioButton)root.findViewById(R.id.S_MaleChoice);
         rb_female = (RadioButton)root.findViewById(R.id.S_FemaleChoice);
+        iv_avatar = (ImageView)root.findViewById(R.id.S_profile_image);
+
+
+
         final MyUser currentUser = BmobUser.getCurrentUser(getActivity(), MyUser.class);
         BmobQuery<MyUser> query = new BmobQuery<MyUser>();
-        query.addWhereEqualTo("objectId", currentUser.getObjectId());
-        query.findObjects(getActivity(), new FindListener<MyUser>() {
+        query.getObject(getActivity(), currentUser.getObjectId(), new GetListener<MyUser>() {
             @Override
-            public void onSuccess(List<MyUser> list) {
-                et_email.setHint(list.get(0).getEmail());
-                et_phone.setHint(list.get(0).getMobilePhoneNumber());
-                if (list.get(0).itsSex()) {
+            public void onSuccess(MyUser myUser) {
+                UrlImageViewHelper.setUrlDrawable(iv_avatar,myUser.getAvatar().getFileUrl(getActivity()));
+                et_email.setHint(myUser.getEmail());
+                et_phone.setHint(myUser.getMobilePhoneNumber());
+                if (myUser.itsSex()) {
                     rg_sex.check(R.id.S_MaleChoice);
                 } else {
                     rg_sex.check(R.id.S_FemaleChoice);
@@ -52,7 +79,7 @@ public class AccountSettingFragment extends Fragment{
             }
 
             @Override
-            public void onError(int i, String s) {
+            public void onFailure(int i, String s) {
                 Toast.makeText(getActivity(), "查询失败.", Toast.LENGTH_SHORT).show();
             }
         });
@@ -72,27 +99,111 @@ public class AccountSettingFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 final MyUser newUser = new MyUser();
-                if (!"".equals(et_email.getText().toString().trim())&&et_email.getText()!=null) {
+                if (!"".equals(et_email.getText().toString().trim()) && et_email.getText() != null) {
                     newUser.setEmail(et_email.getText().toString());
                 }
-                if (!"".equals(et_phone.getText().toString().trim())&&et_phone.getText()!=null) {
+                if (!"".equals(et_phone.getText().toString().trim()) && et_phone.getText() != null) {
                     newUser.setMobilePhoneNumber(et_phone.getText().toString());
                 }
                 newUser.setSex(sex);
-                newUser.update(getActivity(), currentUser.getObjectId(), new UpdateListener() {
-                    @Override
-                    public void onSuccess() {
-                        Toast.makeText(getActivity(), "updatesucceed", Toast.LENGTH_SHORT).show();
-                    }
+                if(avatarHasBeenChanged){
+                    final BmobFile file = new BmobFile(new File(path));
+                    file.upload(getActivity(), new UploadFileListener() {
+                        @Override
+                        public void onSuccess() {
+                            newUser.setAvatar(file);
 
-                    @Override
-                    public void onFailure(int i, String s) {
-                        Toast.makeText(getActivity(), "updatefailed", Toast.LENGTH_SHORT).show();
 
-                    }
-                });
+
+                            //测试
+
+                            View view = View.inflate(getActivity().getApplicationContext(), R.layout.fragment_slider, null);
+                            SL_iv_avatar = (ImageView) view.findViewById(R.id.SL_profile_image);
+                            setFullImageFromFilePath(iv_avatar, path);
+
+                            //测试
+
+
+                            //UrlImageViewHelper.setUrlDrawable(SL_iv_avatar, "http://media.g-cores.com/assets/logo-new-d7a8267cdc6871cd94c329f3a4676512.png");
+                            avatarHasBeenChanged = false;
+                            Toast.makeText(getActivity(), "头像上传成功", Toast.LENGTH_SHORT).show();
+                            newUser.update(getActivity(), currentUser.getObjectId(), new UpdateListener() {
+                                @Override
+                                public void onSuccess() {
+                                    Toast.makeText(getActivity(), "updatesucceed", Toast.LENGTH_SHORT).show();
+
+                                }
+
+                                @Override
+                                public void onFailure(int i, String s) {
+                                    Toast.makeText(getActivity(), "updatefailed", Toast.LENGTH_SHORT).show();
+
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onFailure(int i, String s) {
+                            Toast.makeText(getActivity(), "上传失败", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+
+                }else {
+                    newUser.update(getActivity(), currentUser.getObjectId(), new UpdateListener() {
+                        @Override
+                        public void onSuccess() {
+                            Toast.makeText(getActivity(), "updatesucceed", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onFailure(int i, String s) {
+                            Toast.makeText(getActivity(), "updatefailed", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+            }
+        });
+        //打开相册
+        root.findViewById(R.id.S_SelectPhotoFromGalleryButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent,RESULT_LOAD_IMAGE);
             }
         });
         return root;
     }
+    //从相册中查找图片
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RESULT_LOAD_IMAGE
+                && resultCode == Activity.RESULT_OK) {
+            path = getPathFromGallery(data, getActivity());
+            Log.i("PICTURE", "Path: " + path);
+            if (path != null) {
+                setFullImageFromFilePath(iv_avatar, path);
+            }
+        }
+    }
+
+    public static String getPathFromGallery(Intent data, Context context) {
+        Uri selectedImage = data.getData();
+        String[] filePathColumn = { MediaStore.Images.Media.DATA };
+        Cursor cursor = context.getContentResolver().query(selectedImage,
+                filePathColumn, null, null, null);
+        cursor.moveToFirst();
+        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+        String picturePath = cursor.getString(columnIndex);
+        cursor.close();
+        return picturePath;
+    }
+    public void setFullImageFromFilePath(ImageView imageView, String path) {
+        imageView.setImageBitmap(BitmapFactory.decodeFile(path));
+        avatarHasBeenChanged = true;
+    }
+
+
+
 }

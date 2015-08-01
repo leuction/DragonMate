@@ -6,7 +6,7 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/profile_image"
+        android:id="@+id/S_profile_image"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:src="@drawable/profile"
@@ -52,12 +52,35 @@
                 android:checked="false"/>
     </RadioGroup>
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="打开摄像头拍摄"
+            android:id="@+id/S_TakePhotoFromCameraButton"
+            android:layout_marginRight="50dp"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="从相册中选择图片"
+            android:id="@+id/S_SelectPhotoFromGalleryButton" />
+    </LinearLayout>
+
+
+
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="更新账户信息"
         android:id="@+id/S_UpdateAccountInfoButton"
         android:layout_gravity="center_horizontal" />
+
+
 
 
 </LinearLayout>
