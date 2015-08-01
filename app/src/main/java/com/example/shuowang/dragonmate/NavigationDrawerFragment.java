@@ -4,6 +4,7 @@ package com.example.shuowang.dragonmate;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -31,6 +32,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.GetListener;
+import de.greenrobot.event.EventBus;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -76,6 +78,8 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        EventBus.getDefault().register(this);
 
         // Read in the flag indicating whether or not the user has demonstrated awareness of the
         // drawer. See PREF_USER_LEARNED_DRAWER for details.
@@ -145,6 +149,10 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;*/
     }
+    //接收消息
+    public void onEventMainThread(OnAvatarChangedEvent event) {
+        iv_avatar.setImageBitmap(BitmapFactory.decodeFile(event.getMsg()));
+    }
 
     public boolean isDrawerOpen() {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
@@ -186,6 +194,7 @@ public class NavigationDrawerFragment extends Fragment {
 
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
 
+                /*
                 BmobQuery<MyUser> query = new BmobQuery<MyUser>();
                 query.getObject(getActivity(), BmobUser.getCurrentUser(getActivity()).getObjectId().toString(), new GetListener<MyUser>() {
                     @Override
@@ -197,7 +206,7 @@ public class NavigationDrawerFragment extends Fragment {
                     public void onFailure(int i, String s) {
 
                     }
-                });
+                });*/
 
             }
 
@@ -328,5 +337,11 @@ public class NavigationDrawerFragment extends Fragment {
          * Called when an item in the navigation drawer is selected.
          */
         void onNavigationDrawerItemSelected(int position);
+    }
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 }

@@ -6,6 +6,7 @@ import android.provider.ContactsContract.RawContacts;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.CommonDataKinds.StructuredName;
+import android.provider.ContactsContract.CommonDataKinds.Photo;
 import android.app.Fragment;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -31,6 +32,7 @@ import java.util.List;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.GetListener;
 
@@ -147,6 +149,13 @@ public class DetailFragment extends Fragment{
         values.put(Email.DATA, CI_email);
         values.put(Email.TYPE, Email.TYPE_WORK);
         getActivity().getContentResolver().insert(android.provider.ContactsContract.Data.CONTENT_URI, values);
+/*
+        values.clear();
+        values.put(Data.RAW_CONTACT_ID, rawContactId);
+        values.put(Data.MIMETYPE, Photo.CONTENT_ITEM_TYPE);
+        values.put(Photo.PHOTO, CI_email);
+        values.put(Email.TYPE, Email.TYPE_WORK);
+        getActivity().getContentResolver().insert(android.provider.ContactsContract.Data.CONTENT_URI, values);*/
 
     }
 }

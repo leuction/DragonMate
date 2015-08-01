@@ -45,6 +45,7 @@ import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.GetListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by shuowang on 7/31/15.
@@ -127,21 +128,9 @@ public class AccountSettingFragment extends Fragment{
                         @Override
                         public void onSuccess() {
                             newUser.setAvatar(file);
-
-
-
-                            //测试
-
-                            //View view = View.inflate(getActivity().getApplicationContext(), R.layout.fragment_slider, null);
-                            //SL_iv_avatar = (ImageView) view.findViewById(R.id.SL_profile_image);
-                            //setFullImageFromFilePath(iv_avatar, path);
-
-                            //测试
-
-
-                            //UrlImageViewHelper.setUrlDrawable(SL_iv_avatar, "http://media.g-cores.com/assets/logo-new-d7a8267cdc6871cd94c329f3a4676512.png");
                             avatarHasBeenChanged = false;
                             Toast.makeText(getActivity(), "头像上传成功", Toast.LENGTH_SHORT).show();
+                            EventBus.getDefault().post(new OnAvatarChangedEvent(path));
                             newUser.update(getActivity(), currentUser.getObjectId(), new UpdateListener() {
                                 @Override
                                 public void onSuccess() {
@@ -186,7 +175,7 @@ public class AccountSettingFragment extends Fragment{
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK,
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent,RESULT_LOAD_IMAGE);
+                startActivityForResult(intent, RESULT_LOAD_IMAGE);
             }
         });
         //打开摄像头
