@@ -5,9 +5,11 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -22,8 +24,19 @@ import android.widget.Toast;
 
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
@@ -41,7 +54,7 @@ public class AccountSettingFragment extends Fragment{
     /**
      * A pointer to the current callbacks instance (the Activity).
      */
-
+    private static int CAMERA_PIC_REQUEST = 0;
     private static int RESULT_LOAD_IMAGE = 1;
     EditText et_email,et_phone;
     RadioGroup rg_sex;
@@ -49,6 +62,7 @@ public class AccountSettingFragment extends Fragment{
     ImageView iv_avatar,SL_iv_avatar;
     boolean sex,avatarHasBeenChanged=false;
     String path,path_url;
+    File destination;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,7 +73,8 @@ public class AccountSettingFragment extends Fragment{
         rb_male = (RadioButton)root.findViewById(R.id.S_MaleChoice);
         rb_female = (RadioButton)root.findViewById(R.id.S_FemaleChoice);
         iv_avatar = (ImageView)root.findViewById(R.id.S_profile_image);
-
+        String name = dateToString(new Date(),"yyyy-MM-dd-hh-mm-ss");
+        destination = new File(Environment.getExternalStorageDirectory(), name + ".jpg");
 
 
         final MyUser currentUser = BmobUser.getCurrentUser(getActivity(), MyUser.class);
@@ -67,7 +82,7 @@ public class AccountSettingFragment extends Fragment{
         query.getObject(getActivity(), currentUser.getObjectId(), new GetListener<MyUser>() {
             @Override
             public void onSuccess(MyUser myUser) {
-                UrlImageViewHelper.setUrlDrawable(iv_avatar,myUser.getAvatar().getFileUrl(getActivity()));
+                UrlImageViewHelper.setUrlDrawable(iv_avatar, myUser.getAvatar().getFileUrl(getActivity()));
                 et_email.setHint(myUser.getEmail());
                 et_phone.setHint(myUser.getMobilePhoneNumber());
                 if (myUser.itsSex()) {
@@ -117,9 +132,9 @@ public class AccountSettingFragment extends Fragment{
 
                             //测试
 
-                            View view = View.inflate(getActivity().getApplicationContext(), R.layout.fragment_slider, null);
-                            SL_iv_avatar = (ImageView) view.findViewById(R.id.SL_profile_image);
-                            setFullImageFromFilePath(iv_avatar, path);
+                            //View view = View.inflate(getActivity().getApplicationContext(), R.layout.fragment_slider, null);
+                            //SL_iv_avatar = (ImageView) view.findViewById(R.id.SL_profile_image);
+                            //setFullImageFromFilePath(iv_avatar, path);
 
                             //测试
 
@@ -145,7 +160,7 @@ public class AccountSettingFragment extends Fragment{
                         @Override
                         public void onFailure(int i, String s) {
                             Toast.makeText(getActivity(), "上传失败", Toast.LENGTH_SHORT).show();
-
+                            avatarHasBeenChanged = false;
                         }
                     });
 
@@ -174,6 +189,16 @@ public class AccountSettingFragment extends Fragment{
                 startActivityForResult(intent,RESULT_LOAD_IMAGE);
             }
         });
+        //打开摄像头
+        root.findViewById(R.id.S_TakePhotoFromCameraButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(destination));
+                startActivityForResult(intent, CAMERA_PIC_REQUEST);
+            }
+        });
+
         return root;
     }
     //从相册中查找图片
@@ -181,10 +206,28 @@ public class AccountSettingFragment extends Fragment{
         if (requestCode == RESULT_LOAD_IMAGE
                 && resultCode == Activity.RESULT_OK) {
             path = getPathFromGallery(data, getActivity());
-            Log.i("PICTURE", "Path: " + path);
             if (path != null) {
                 setFullImageFromFilePath(iv_avatar, path);
+                avatarHasBeenChanged = true;
             }
+        }
+        if (requestCode == CAMERA_PIC_REQUEST
+                && resultCode == Activity.RESULT_OK) {
+            //Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            //iv_avatar.setImageBitmap(bitmap);
+            try {
+                FileInputStream in = new FileInputStream(destination);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 10;
+                path = destination.getAbsolutePath();
+                //tvPath.setText(imagePath);
+                Bitmap bmp = BitmapFactory.decodeStream(in, null, options);
+                iv_avatar.setImageBitmap(bmp);
+                avatarHasBeenChanged = true;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 
@@ -201,9 +244,19 @@ public class AccountSettingFragment extends Fragment{
     }
     public void setFullImageFromFilePath(ImageView imageView, String path) {
         imageView.setImageBitmap(BitmapFactory.decodeFile(path));
-        avatarHasBeenChanged = true;
     }
 
+    public static String random(int length) {
+        StringBuilder builder = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            builder.append((char) (ThreadLocalRandom.current().nextInt(33, 128)));
+        }
+        return builder.toString();
+    }
+    public String dateToString(Date date, String format) {
+        SimpleDateFormat df = new SimpleDateFormat(format);
+        return df.format(date);
+    }
 
 
 }
