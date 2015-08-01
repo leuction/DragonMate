@@ -9,7 +9,6 @@
         android:id="@+id/SL_profile_image"
         android:layout_width="96dp"
         android:layout_height="96dp"
-        android:src="@drawable/profile"
         app:border_width="3dp"
         app:border_color="#777777"
         android:layout_gravity="center_horizontal"

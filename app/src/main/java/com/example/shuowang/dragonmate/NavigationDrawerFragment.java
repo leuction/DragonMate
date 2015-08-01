@@ -67,6 +67,7 @@ public class NavigationDrawerFragment extends Fragment {
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+    ImageView iv_avatar;
 
 
     public NavigationDrawerFragment() {
@@ -102,6 +103,7 @@ public class NavigationDrawerFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_slider,container,false);
 
+        iv_avatar = (ImageView) root.findViewById(R.id.SL_profile_image);
         mDrawerListView = (ListView) root.findViewById(R.id.ChooseFragmentListView);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -183,6 +185,20 @@ public class NavigationDrawerFragment extends Fragment {
                 }
 
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+
+                BmobQuery<MyUser> query = new BmobQuery<MyUser>();
+                query.getObject(getActivity(), BmobUser.getCurrentUser(getActivity()).getObjectId().toString(), new GetListener<MyUser>() {
+                    @Override
+                    public void onSuccess(MyUser myUser) {
+                        UrlImageViewHelper.setUrlDrawable(iv_avatar,myUser.getAvatar().getFileUrl(getActivity()));
+                    }
+
+                    @Override
+                    public void onFailure(int i, String s) {
+
+                    }
+                });
+
             }
 
             @Override

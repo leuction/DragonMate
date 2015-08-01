@@ -245,14 +245,6 @@ public class AccountSettingFragment extends Fragment{
     public void setFullImageFromFilePath(ImageView imageView, String path) {
         imageView.setImageBitmap(BitmapFactory.decodeFile(path));
     }
-
-    public static String random(int length) {
-        StringBuilder builder = new StringBuilder(length);
-        for (int i = 0; i < length; i++) {
-            builder.append((char) (ThreadLocalRandom.current().nextInt(33, 128)));
-        }
-        return builder.toString();
-    }
     public String dateToString(Date date, String format) {
         SimpleDateFormat df = new SimpleDateFormat(format);
         return df.format(date);

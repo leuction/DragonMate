@@ -7,7 +7,6 @@
         android:id="@+id/avatar"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:src="@drawable/profile"
         app:border_width="3dp"
         app:border_color="#777777"
         android:layout_margin="20dp" />

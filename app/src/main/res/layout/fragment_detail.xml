@@ -8,7 +8,6 @@
         android:id="@+id/D_profile_image"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/profile"
         app:border_width="3dp"
         app:border_color="#777777"
         android:layout_marginTop="30dp"
