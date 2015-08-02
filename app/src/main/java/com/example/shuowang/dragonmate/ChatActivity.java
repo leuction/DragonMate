@@ -24,9 +24,13 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.im.bean.BmobChatUser;
+import cn.bmob.im.bean.BmobMsg;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.listener.GetListener;
 
 
-public class ChatActivity extends Activity {
+public class ChatActivity extends BaseActivity {
 
 
     private Button sendButton = null;
@@ -34,7 +38,7 @@ public class ChatActivity extends Activity {
     private ListView chatListView = null;
     private List<ChatEntity> chatList = null;
     private ChatAdapter chatAdapter = null;
-    private String myObjectId,otherObjectId;
+    private String selfObjectId,targetObjectId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +48,39 @@ public class ChatActivity extends Activity {
 
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
-            myObjectId = (String) bundle.get("myObjectId");
-            otherObjectId = (String) bundle.get("otherObjectId");
+            selfObjectId = (String) bundle.get("selfObjectId");
+            targetObjectId = (String) bundle.get("targetObjectId");
         }
-
         contentEditText = (EditText) this.findViewById(R.id.C_et_content);
         sendButton = (Button) this.findViewById(R.id.C_btn_send);
         chatListView = (ListView) this.findViewById(R.id.C_listview);
+
+
+        BmobQuery<MyUser> selfQuery = new BmobQuery<MyUser>();
+        selfQuery.getObject(ChatActivity.this, selfObjectId, new GetListener<MyUser>() {
+            @Override
+            public void onSuccess(MyUser myUser) {
+                //查询头像
+                BmobQuery<MyUser> targetQuery = new BmobQuery<MyUser>();
+                targetQuery.getObject(ChatActivity.this, selfObjectId, new GetListener<MyUser>() {
+                    @Override
+                    public void onSuccess(MyUser myUser) {
+                        //查询头像
+                        toast("query success");
+                    }
+
+                    @Override
+                    public void onFailure(int i, String s) {
+                        toast("failure");
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                toast("failure");
+            }
+        });
 
         chatList = new ArrayList<ChatEntity>();
         ChatEntity chatEntity = null;
@@ -58,11 +88,11 @@ public class ChatActivity extends Activity {
             chatEntity = new ChatEntity();
             if (i % 2 == 0) {
                 chatEntity.setComeMsg(false);
-                chatEntity.setContent(myObjectId);
+                chatEntity.setContent("123");
                 chatEntity.setChatTime("2012-09-20 15:12:32");
             }else {
                 chatEntity.setComeMsg(true);
-                chatEntity.setContent(otherObjectId);
+                chatEntity.setContent("123");
                 chatEntity.setChatTime("2012-09-20 15:13:32");
             }
             chatList.add(chatEntity);
@@ -103,6 +133,13 @@ public class ChatActivity extends Activity {
     }
 
     private void send(){
+
+        BmobChatUser targetUser = new BmobChatUser();
+        targetUser.setObjectId(targetObjectId);
+        // 组装BmobMessage对象
+        BmobMsg message = BmobMsg.createTextSendMsg(this, targetObjectId, contentEditText.getText().toString());
+        //不带监听回调，默认发送完成，将数据保存到本地消息表和最近会话表中
+        manager.sendTextMessage(targetUser, message);
         ChatEntity chatEntity = new ChatEntity();
         chatEntity.setChatTime("2012-09-20 15:16:34");
         chatEntity.setContent(contentEditText.getText().toString());

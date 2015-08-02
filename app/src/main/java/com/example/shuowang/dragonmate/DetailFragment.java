@@ -99,8 +99,8 @@ public class DetailFragment extends Fragment{
                 }
                 if(position==4){
                     Intent intent = new Intent(getActivity(),ChatActivity.class);
-                    intent.putExtra("myObjectId",BmobUser.getCurrentUser(getActivity()).getObjectId());
-                    intent.putExtra("otherObjectId",objectId);
+                    intent.putExtra("selfObjectId",BmobUser.getCurrentUser(getActivity()).getObjectId());
+                    intent.putExtra("targetObjectId",objectId);
                     startActivity(intent);
                 }
                 if(position==5){
