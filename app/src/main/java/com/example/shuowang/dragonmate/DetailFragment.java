@@ -35,6 +35,7 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.GetListener;
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by shuowang on 7/31/15.
@@ -98,6 +99,8 @@ public class DetailFragment extends Fragment{
                 }
                 if(position==4){
                     Intent intent = new Intent(getActivity(),ChatActivity.class);
+                    intent.putExtra("myObjectId",BmobUser.getCurrentUser(getActivity()).getObjectId());
+                    intent.putExtra("otherObjectId",objectId);
                     startActivity(intent);
                 }
                 if(position==5){

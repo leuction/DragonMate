@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 public class ChatActivity extends Activity {
 
 
@@ -33,12 +34,19 @@ public class ChatActivity extends Activity {
     private ListView chatListView = null;
     private List<ChatEntity> chatList = null;
     private ChatAdapter chatAdapter = null;
+    private String myObjectId,otherObjectId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_chat);
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle!=null){
+            myObjectId = (String) bundle.get("myObjectId");
+            otherObjectId = (String) bundle.get("otherObjectId");
+        }
 
         contentEditText = (EditText) this.findViewById(R.id.C_et_content);
         sendButton = (Button) this.findViewById(R.id.C_btn_send);
@@ -50,11 +58,11 @@ public class ChatActivity extends Activity {
             chatEntity = new ChatEntity();
             if (i % 2 == 0) {
                 chatEntity.setComeMsg(false);
-                chatEntity.setContent("Hello");
+                chatEntity.setContent(myObjectId);
                 chatEntity.setChatTime("2012-09-20 15:12:32");
             }else {
                 chatEntity.setComeMsg(true);
-                chatEntity.setContent("Hello,nice to meet you!");
+                chatEntity.setContent(otherObjectId);
                 chatEntity.setChatTime("2012-09-20 15:13:32");
             }
             chatList.add(chatEntity);
@@ -126,7 +134,6 @@ public class ChatActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
-
 
 
 
@@ -208,7 +215,6 @@ public class ChatActivity extends Activity {
             private ImageView userImageView;
             private TextView contentTextView;
         }
-
     }
 
 }
