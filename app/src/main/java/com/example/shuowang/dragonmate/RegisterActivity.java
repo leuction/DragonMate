@@ -12,7 +12,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import cn.bmob.im.BmobUserManager;
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobInstallation;
 import cn.bmob.v3.listener.SaveListener;
 
 
@@ -55,17 +57,20 @@ public class RegisterActivity extends BaseActivity {
                 String phone = et_phone.getText().toString();
                 String password = et_password.getText().toString();
                 String passwordcheck = et_passwordcheck.getText().toString();
-                MyUser user = new MyUser();
+                final MyUser user = new MyUser();
                 user.setUsername(username);
                 user.setEmail(email);
                 user.setMobilePhoneNumber(phone);
                 user.setPassword(password);
                 user.setSex(sex);
+                user.setDeviceType("android");
+                user.setInstallId(BmobInstallation.getInstallationId(RegisterActivity.this));
                 if(password.equals(passwordcheck)&&!email.equals("")&&!phone.equals("")){
                     user.signUp(RegisterActivity.this, new SaveListener() {
                         @Override
                         public void onSuccess() {
-                            toast("成功登陆");
+                            userManager.bindInstallationForRegister(user.getUsername());
+                            toast("成功注册");
                             Intent intent = new Intent();
                             intent.setClass(RegisterActivity.this,LoginActivity.class);
                             startActivity(intent);
@@ -74,7 +79,7 @@ public class RegisterActivity extends BaseActivity {
 
                         @Override
                         public void onFailure(int i, String s) {
-                            toast("登录失败，请检查您的网络设置");
+                            toast("注册失败，请检查您的网络设置");
                         }
                     });
                 }

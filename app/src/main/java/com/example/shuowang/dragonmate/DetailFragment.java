@@ -57,7 +57,7 @@ public class DetailFragment extends Fragment{
             @Override
             public void onSuccess(MyUser myUser) {
                 if (myUser.isAvatarInit()) {
-                    UrlImageViewHelper.setUrlDrawable(iv_avatar,myUser.getAvatar().getFileUrl(getActivity()));
+                    UrlImageViewHelper.setUrlDrawable(iv_avatar,myUser.getMyAvatar().getFileUrl(getActivity()));
                 } else {
                     UrlImageViewHelper.setUrlDrawable(iv_avatar,"http://file.bmob.cn/M01/AB/44/oYYBAFW8UkWATmoPAACguaHH6So482.jpg");
                 }

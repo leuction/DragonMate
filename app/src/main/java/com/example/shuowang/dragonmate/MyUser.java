@@ -3,20 +3,21 @@ package com.example.shuowang.dragonmate;
 /**
  * Created by shuowang on 7/29/15.
  */
+import cn.bmob.im.bean.BmobChatUser;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 
-public class MyUser extends BmobUser{
+public class MyUser extends BmobChatUser{
     private boolean sex;//true represent male,flase represent female
     private boolean avatarInit=false;
-    private BmobFile avatar;//头像
+    private BmobFile myAvatar;//头像
 
-    public BmobFile getAvatar() {
-        return avatar;
+    public BmobFile getMyAvatar() {
+        return myAvatar;
     }
 
-    public void setAvatar(BmobFile avatar) {
-        this.avatar = avatar;
+    public void setMyAvatar(BmobFile myAvatar) {
+        this.myAvatar = myAvatar;
         avatarInit = true;
     }
 

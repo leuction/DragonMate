@@ -52,7 +52,7 @@ public class MainFragment extends Fragment {
                             trueName.add(myUser.getUsername().toString());
                             userInfo.add(myUser.getEmail().toString());
                             if (myUser.isAvatarInit()) {
-                                avatar_url.add(myUser.getAvatar().getFileUrl(getActivity()));
+                                avatar_url.add(myUser.getMyAvatar().getFileUrl(getActivity()));
                             } else {
                                 avatar_url.add("http://file.bmob.cn/M01/AB/44/oYYBAFW8UkWATmoPAACguaHH6So482.jpg");
                             }

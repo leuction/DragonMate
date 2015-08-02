@@ -83,7 +83,11 @@ public class AccountSettingFragment extends Fragment{
         query.getObject(getActivity(), currentUser.getObjectId(), new GetListener<MyUser>() {
             @Override
             public void onSuccess(MyUser myUser) {
-                UrlImageViewHelper.setUrlDrawable(iv_avatar, myUser.getAvatar().getFileUrl(getActivity()));
+                if (myUser.isAvatarInit()) {
+                    UrlImageViewHelper.setUrlDrawable(iv_avatar,myUser.getMyAvatar().getFileUrl(getActivity()));
+                } else {
+                    UrlImageViewHelper.setUrlDrawable(iv_avatar,"http://file.bmob.cn/M01/AB/44/oYYBAFW8UkWATmoPAACguaHH6So482.jpg");
+                }
                 et_email.setHint(myUser.getEmail());
                 et_phone.setHint(myUser.getMobilePhoneNumber());
                 if (myUser.itsSex()) {
@@ -127,7 +131,7 @@ public class AccountSettingFragment extends Fragment{
                     file.upload(getActivity(), new UploadFileListener() {
                         @Override
                         public void onSuccess() {
-                            newUser.setAvatar(file);
+                            newUser.setMyAvatar(file);
                             avatarHasBeenChanged = false;
                             Toast.makeText(getActivity(), "头像上传成功", Toast.LENGTH_SHORT).show();
                             EventBus.getDefault().post(new OnAvatarChangedEvent(path));

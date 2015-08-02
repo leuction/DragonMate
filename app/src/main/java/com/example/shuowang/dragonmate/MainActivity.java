@@ -52,7 +52,11 @@ public class MainActivity extends BaseActivity
         selfQuery.getObject(this, currentUser.getObjectId(), new GetListener<MyUser>() {
             @Override
             public void onSuccess(MyUser myUser) {
-                UrlImageViewHelper.setUrlDrawable(SL_iv_avatar, myUser.getAvatar().getFileUrl(MainActivity.this));
+                if (myUser.isAvatarInit()) {
+                    UrlImageViewHelper.setUrlDrawable(SL_iv_avatar,myUser.getMyAvatar().getFileUrl(MainActivity.this));
+                } else {
+                    UrlImageViewHelper.setUrlDrawable(SL_iv_avatar,"http://file.bmob.cn/M01/AB/44/oYYBAFW8UkWATmoPAACguaHH6So482.jpg");
+                }
             }
 
             @Override
