@@ -26,4 +26,5 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:1.3.0'
     compile 'de.greenrobot:eventbus:2.4.0'
     compile files('libs/urlimageviewhelper-1.0.4.jar')
+    compile files('libs/BmobIM_V1.1.8beta_20150408.jar')
 }

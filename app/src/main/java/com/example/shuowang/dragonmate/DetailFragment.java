@@ -68,6 +68,7 @@ public class DetailFragment extends Fragment{
                 items.add("E-mail:" + e_mail);
                 items.add("电话:" + phone);
                 items.add("性别：" + sexTOString(myUser.itsSex()));
+                items.add("发送消息");
                 items.add("插入联系人");
                 infoList.setAdapter(new ArrayAdapter<String>(
                         getActivity(),
@@ -96,6 +97,10 @@ public class DetailFragment extends Fragment{
                     startActivity(intent);
                 }
                 if(position==4){
+                    Intent intent = new Intent(getActivity(),ChatActivity.class);
+                    startActivity(intent);
+                }
+                if(position==5){
                     ContactInsert(userName,phone,e_mail);
                     Toast.makeText(getActivity(),"插入成功",Toast.LENGTH_SHORT).show();
                 }
@@ -149,13 +154,6 @@ public class DetailFragment extends Fragment{
         values.put(Email.DATA, CI_email);
         values.put(Email.TYPE, Email.TYPE_WORK);
         getActivity().getContentResolver().insert(android.provider.ContactsContract.Data.CONTENT_URI, values);
-/*
-        values.clear();
-        values.put(Data.RAW_CONTACT_ID, rawContactId);
-        values.put(Data.MIMETYPE, Photo.CONTENT_ITEM_TYPE);
-        values.put(Photo.PHOTO, CI_email);
-        values.put(Email.TYPE, Email.TYPE_WORK);
-        getActivity().getContentResolver().insert(android.provider.ContactsContract.Data.CONTENT_URI, values);*/
 
     }
 }
