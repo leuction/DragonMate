@@ -44,7 +44,7 @@ public class DetailFragment extends Fragment{
     ListView infoList;
     ImageView iv_avatar;
     List<String> items = null;
-    String objectId,userName,phone,e_mail;
+    String objectId,userName,phone,e_mail,targetUserAvatarUrl,selfUserAvatarUrl;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,6 +53,18 @@ public class DetailFragment extends Fragment{
         infoList = (ListView) root.findViewById(R.id.D_InfoListView);
         items = new ArrayList<String>();
         objectId = getArguments().getString("objectId");
+        BmobQuery<MyUser> selfQuery = new BmobQuery<MyUser>();
+        selfQuery.getObject(getActivity(), MyUser.getCurrentUser(getActivity()).getObjectId(), new GetListener<MyUser>() {
+            @Override
+            public void onSuccess(MyUser myUser) {
+                selfUserAvatarUrl = myUser.getMyAvatar().getFileUrl(getActivity());
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+
+            }
+        });
         BmobQuery<MyUser> query = new BmobQuery<MyUser>();
         query.getObject(getActivity(), objectId, new GetListener<MyUser>() {
             @Override
@@ -62,6 +74,7 @@ public class DetailFragment extends Fragment{
                 } else {
                     UrlImageViewHelper.setUrlDrawable(iv_avatar,"http://file.bmob.cn/M01/AB/44/oYYBAFW8UkWATmoPAACguaHH6So482.jpg");
                 }
+                targetUserAvatarUrl = myUser.getMyAvatar().getFileUrl(getActivity());
                 userName =myUser.getUsername().toString();
                 phone = myUser.getMobilePhoneNumber().toString();
                 e_mail = myUser.getEmail().toString();
@@ -101,6 +114,8 @@ public class DetailFragment extends Fragment{
                     Intent intent = new Intent(getActivity(),ChatActivity.class);
                     intent.putExtra("selfObjectId",BmobUser.getCurrentUser(getActivity()).getObjectId());
                     intent.putExtra("targetObjectId",objectId);
+                    intent.putExtra("selfUserAvatarUrl",selfUserAvatarUrl);
+                    intent.putExtra("targetUserAvatarUrl",targetUserAvatarUrl);
                     startActivity(intent);
                 }
                 if(position==5){

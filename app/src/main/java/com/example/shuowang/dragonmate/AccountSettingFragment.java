@@ -204,6 +204,7 @@ public class AccountSettingFragment extends Fragment{
                 avatarHasBeenChanged = true;
             }
         }
+        //打开摄像头
         if (requestCode == CAMERA_PIC_REQUEST
                 && resultCode == Activity.RESULT_OK) {
             //Bitmap bitmap = (Bitmap) data.getExtras().get("data");

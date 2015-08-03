@@ -30,7 +30,6 @@
             android:layout_height="50dp"
             app:border_width="3dp"
             app:border_color="#777777"
-            android:src="@drawable/profile"
             android:focusable="false"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"/>
