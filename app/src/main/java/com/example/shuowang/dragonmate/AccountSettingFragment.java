@@ -2,6 +2,7 @@ package com.example.shuowang.dragonmate;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -64,6 +65,7 @@ public class AccountSettingFragment extends Fragment{
     boolean sex,avatarHasBeenChanged=false;
     String path,path_url;
     File destination;
+    ProgressDialog progressDialog;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -118,6 +120,7 @@ public class AccountSettingFragment extends Fragment{
         root.findViewById(R.id.S_UpdateAccountInfoButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog = ProgressDialog.show(getActivity(),"loading","please wait");
                 final MyUser newUser = new MyUser();
                 if (!"".equals(et_email.getText().toString().trim()) && et_email.getText() != null) {
                     newUser.setEmail(et_email.getText().toString());
@@ -138,8 +141,8 @@ public class AccountSettingFragment extends Fragment{
                             newUser.update(getActivity(), currentUser.getObjectId(), new UpdateListener() {
                                 @Override
                                 public void onSuccess() {
+                                    progressDialog.dismiss();
                                     Toast.makeText(getActivity(), "updatesucceed", Toast.LENGTH_SHORT).show();
-
                                 }
 
                                 @Override
