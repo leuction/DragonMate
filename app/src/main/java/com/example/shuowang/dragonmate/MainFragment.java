@@ -47,6 +47,7 @@ public class MainFragment extends Fragment {
                     public void onSuccess(List<MyUser> list) {
                         Toast.makeText(getActivity(), "列表初始化成功", Toast.LENGTH_SHORT).show();
 
+                        
                         for (MyUser myUser : list) {
                             objectId.add(myUser.getObjectId().toString());
                             if (myUser.getName() != null) {
