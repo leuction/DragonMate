@@ -49,8 +49,16 @@ public class MainFragment extends Fragment {
 
                         for (MyUser myUser : list) {
                             objectId.add(myUser.getObjectId().toString());
-                            trueName.add(myUser.getUsername().toString());
-                            userInfo.add(myUser.getEmail().toString());
+                            if (myUser.getName() != null) {
+                                trueName.add("姓名："+myUser.getName().toString());
+                            } else {
+                                trueName.add("用户名：" + myUser.getUsername().toString());
+                            }
+                            if (myUser.getAge() != null) {
+                                userInfo.add("年龄："+myUser.getAge().toString());
+                            } else {
+                                  userInfo.add("年龄："+"未填写");
+                            }
                             if (myUser.isAvatarInit()) {
                                 avatar_url.add(myUser.getMyAvatar().getFileUrl(getActivity()));
                             } else {

@@ -1,6 +1,296 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/scrollView"
+    android:layout_gravity="center_horizontal" >
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</LinearLayout>
+
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Q_NameText"
+            android:layout_gravity="center_horizontal"
+            android:hint="请输入姓名" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/Q_AgeText"
+            android:hint="年龄" />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:layout_width="185dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/Q_HeightText"
+                    android:hint="身高"
+                    android:layout_column="0" />
+
+                <EditText
+                    android:layout_width="185dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/Q_WeightText"
+                    android:hint="体重"
+                    android:layout_column="1" />
+            </TableRow>
+
+        </TableLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/Q_EducationText"
+                android:text="学历"/>
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/Q_EducationChoiceRadioGroup">
+
+                <RadioButton
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="本科"
+                    android:id="@+id/Q_BachelorChoice"
+                    android:checked="false" />
+
+                <RadioButton
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="硕士"
+                    android:id="@+id/Q_MasterChoice"
+                    android:checked="false" />
+
+                <RadioButton
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="博士"
+                    android:id="@+id/Q_DoctorChoice"
+                    android:checked="false" />
+
+                <RadioButton
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="海归"
+                    android:id="@+id/Q_ReturneeChoice"
+                    android:checked="false" />
+
+                <RadioButton
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="其他"
+                    android:id="@+id/Q_OthersChoice"
+                    android:checked="false" />
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="年薪（元）"
+                android:id="@+id/Q_SalaryText" />
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/Q_SalaryChoiceRadioGroup">
+
+                <RadioButton
+                    android:layout_width="85dp"
+                    android:layout_height="wrap_content"
+                    android:text="5万以下"
+                    android:id="@+id/Q_LowSalaryChoice"
+                    android:checked="false" />
+
+                <RadioButton
+                    android:layout_width="88dp"
+                    android:layout_height="wrap_content"
+                    android:text="5万-12万"
+                    android:id="@+id/Q_MiddleSalaryChoice"
+                    android:checked="false" />
+
+                <RadioButton
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:text="12万以上"
+                    android:id="@+id/Q_HighSalaryChoice"
+                    android:checked="false" />
+
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="是否有房"
+                android:id="@+id/Q_HouseText" />
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/Q_HouseChoiceRadioGroup">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="有"
+                    android:id="@+id/Q_HaveHouseChoice"
+                    android:checked="false" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="无"
+                    android:id="@+id/Q_DontHaveHouseChoice"
+                    android:checked="false" />
+
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="是否有车"
+                android:id="@+id/Q_CarText" />
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/Q_CarChoiceRadioGroup">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="有"
+                    android:id="@+id/Q_HaveCarChoice"
+                    android:checked="false" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="无"
+                    android:id="@+id/Q_DontHaveCarChoice"
+                    android:checked="false" />
+
+            </RadioGroup>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="婚姻状况"
+                android:id="@+id/Q_MarriageText" />
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/Q_MarriageChoiceRadioGroup">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="未婚"
+                    android:id="@+id/Q_UnmarriedChoice"
+                    android:layout_gravity="center_horizontal"
+                    android:checked="false" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="离异"
+                    android:id="@+id/Q_DissociatonChoice"
+                    android:checked="false" />
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Q_HometownText"
+            android:hint="籍贯" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Q_LiveplaceText"
+            android:hint="现居住地" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Q_HobbyText"
+            android:hint="爱好" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Q_SpecialtyText"
+            android:hint="特长" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Q_RequirementText"
+            android:hint="特殊择偶要求" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="完成"
+            android:id="@+id/Q_CompleteButton"
+            android:layout_gravity="center_horizontal" />
+
+    </LinearLayout>
+</ScrollView>

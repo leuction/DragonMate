@@ -1,3 +1,4 @@
+
 package com.example.shuowang.dragonmate;
 
 
@@ -15,6 +16,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +46,7 @@ public class DetailFragment extends Fragment{
     ListView infoList;
     ImageView iv_avatar;
     List<String> items = null;
-    String objectId,userName,phone,e_mail,targetUserAvatarUrl,selfUserAvatarUrl;
+    String objectId,userName,phone,e_mail,name,age,height,weight,hometown,liveplace,hobby,specialty,requirement,targetUserAvatarUrl,selfUserAvatarUrl;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,7 +61,7 @@ public class DetailFragment extends Fragment{
             public void onSuccess(MyUser myUser) {
                 if(myUser.isAvatarInit()){
                     selfUserAvatarUrl = myUser.getMyAvatar().getFileUrl(getActivity());
-                } else{
+                }else{
                     selfUserAvatarUrl = "http://file.bmob.cn/M01/AB/44/oYYBAFW8UkWATmoPAACguaHH6So482.jpg";
                 }
             }
@@ -78,16 +80,90 @@ public class DetailFragment extends Fragment{
                     targetUserAvatarUrl = myUser.getMyAvatar().getFileUrl(getActivity());
                 } else {
                     UrlImageViewHelper.setUrlDrawable(iv_avatar,"http://file.bmob.cn/M01/AB/44/oYYBAFW8UkWATmoPAACguaHH6So482.jpg");
+                    targetUserAvatarUrl = "http://file.bmob.cn/M01/AB/44/oYYBAFW8UkWATmoPAACguaHH6So482.jpg";
                 }
                 userName =myUser.getUsername().toString();
                 phone = myUser.getMobilePhoneNumber().toString();
                 e_mail = myUser.getEmail().toString();
+
+                if(myUser.getName()!=null){
+                    name = myUser.getName().toString();
+                }else {
+                    name = "未填写";
+                }
+
+                if(myUser.getAge()!=null){
+                    age = myUser.getAge().toString();
+                }else {
+                    age = "未填写";
+                }
+
+                if(myUser.getHeight()!=null){
+                    height = myUser.getHeight().toString();
+                }else {
+                    height = "未填写";
+                }
+
+                if(myUser.getWeight()!=null){
+                    weight = myUser.getWeight().toString();
+                }else {
+                    weight = "未填写";
+                }
+
+                if(myUser.getHometown()!=null){
+                    hometown = myUser.getHometown().toString();
+                }else {
+                    hometown = "未填写";
+                }
+
+                if(myUser.getLiveplace()!=null){
+                    liveplace = myUser.getLiveplace().toString();
+                }else {
+                    liveplace = "未填写";
+                }
+
+                if(myUser.getHobby()!=null){
+                    hobby = myUser.getHobby().toString();
+                }else {
+                    hobby = "未填写";
+                }
+
+                if(myUser.getSpecialty()!=null){
+                    specialty = myUser.getSpecialty().toString();
+                }else {
+                    specialty = "未填写";
+                }
+
+                if(myUser.getRequirement()!=null){
+                    requirement = myUser.getRequirement().toString();
+                }else {
+                    requirement = "未填写";
+                }
+
+
                 items.add("用户名：" + userName);
                 items.add("E-mail:" + e_mail);
                 items.add("电话:" + phone);
                 items.add("性别：" + sexTOString(myUser.itsSex()));
                 items.add("发送消息");
                 items.add("插入联系人");
+                items.add("");
+                items.add("以下为其更多个人资料：");
+                items.add("姓名："+name);
+                items.add("年龄："+age);
+                items.add("身高："+height);
+                items.add("体重："+weight);
+                items.add("籍贯："+hometown);
+                items.add("现居住地："+liveplace);
+                items.add("爱好："+hobby);
+                items.add("特长："+specialty);
+                items.add("学历：" + educationTOString(myUser.itsEducation()));
+                items.add("年薪（元）：" + salaryTOString(myUser.itsSalary()));
+                items.add("是否有房：" + houseTOString(myUser.itsHouse()));
+                items.add("是否有车：" + carTOString(myUser.itsCar()));
+                items.add("婚姻状况：" + marriageTOString(myUser.itsMarriage()));
+                items.add("特殊择偶要求："+requirement);
+
                 infoList.setAdapter(new ArrayAdapter<String>(
                         getActivity(),
                         android.R.layout.simple_list_item_activated_1,
@@ -146,6 +222,52 @@ public class DetailFragment extends Fragment{
             return "女";
         }
     }
+
+    public static String educationTOString(int education){
+        switch (education){
+            case 1:return "本科";
+            case 2:return "硕士";
+            case 3:return "博士";
+            case 4:return "海归";
+            case 5:return "其他";
+            default:return "未填写";
+        }
+    }
+
+    public static String salaryTOString(int salary){
+        switch (salary){
+            case 1:return "5万以下";
+            case 2:return "5万-12万";
+            case 3:return "12万以上";
+            default:return "未填写";
+        }
+    }
+
+    public static String houseTOString(int house){
+        switch (house){
+            case 1:return "有";
+            case 2:return "无";
+            default:return "未填写";
+        }
+    }
+
+    public static String carTOString(int car){
+        switch (car){
+            case 1:return "有";
+            case 2:return "无";
+            default:return "未填写";
+        }
+    }
+
+    public static String marriageTOString(int marriage){
+        switch (marriage){
+            case 1:return "未婚";
+            case 2:return "离异";
+            default:return "未填写";
+        }
+    }
+
+
     public void ContactInsert(String CI_username,String CI_phone,String CI_email) {
         ContentValues values = new ContentValues();
         /*
