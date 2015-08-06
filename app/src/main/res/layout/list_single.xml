@@ -9,7 +9,8 @@
         android:layout_height="150dp"
         app:border_width="3dp"
         app:border_color="#777777"
-        android:layout_margin="20dp" />
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -18,7 +19,7 @@
         android:text="Large Text"
         android:id="@+id/TrueNameText"
         android:focusableInTouchMode="false"
-        android:textSize="35dp"
+        android:textSize="28dp"
         android:layout_alignTop="@+id/avatar"
         android:layout_toEndOf="@+id/avatar" />
 
@@ -29,6 +30,7 @@
         android:text="Medium Text"
         android:id="@+id/UserInfoText"
         android:layout_below="@+id/TrueNameText"
-        android:layout_alignEnd="@+id/TrueNameText" />
+        android:layout_alignLeft="@+id/TrueNameText"
+        android:layout_alignStart="@+id/TrueNameText" />
 
 </RelativeLayout>

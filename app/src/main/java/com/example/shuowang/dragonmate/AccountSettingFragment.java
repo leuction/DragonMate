@@ -64,6 +64,7 @@ public class AccountSettingFragment extends Fragment{
     boolean sex,avatarHasBeenChanged=false;
     String path,path_url;
     File destination;
+    int house,car,marriage,education,salary;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,8 +75,8 @@ public class AccountSettingFragment extends Fragment{
         rb_male = (RadioButton)root.findViewById(R.id.S_MaleChoice);
         rb_female = (RadioButton)root.findViewById(R.id.S_FemaleChoice);
         iv_avatar = (ImageView)root.findViewById(R.id.S_profile_image);
-        String name = dateToString(new Date(),"yyyy-MM-dd-hh-mm-ss");
-        destination = new File(Environment.getExternalStorageDirectory(), name + ".jpg");
+        String fileName = dateToString(new Date(),"yyyy-MM-dd-hh-mm-ss");
+        destination = new File(Environment.getExternalStorageDirectory(), fileName + ".jpg");
 
 
         final MyUser currentUser = BmobUser.getCurrentUser(getActivity(), MyUser.class);
@@ -83,6 +84,11 @@ public class AccountSettingFragment extends Fragment{
         query.getObject(getActivity(), currentUser.getObjectId(), new GetListener<MyUser>() {
             @Override
             public void onSuccess(MyUser myUser) {
+                house=myUser.itsHouse();
+                car=myUser.itsCar();
+                marriage=myUser.itsMarriage();
+                education=myUser.itsEducation();
+                salary=myUser.itsSalary();
                 if (myUser.isAvatarInit()) {
                     UrlImageViewHelper.setUrlDrawable(iv_avatar,myUser.getMyAvatar().getFileUrl(getActivity()));
                 } else {
@@ -119,6 +125,11 @@ public class AccountSettingFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 final MyUser newUser = new MyUser();
+                newUser.setEducation(education);
+                newUser.setSalary(salary);
+                newUser.setHouse(house);
+                newUser.setCar(car);
+                newUser.setMarriage(marriage);
                 if (!"".equals(et_email.getText().toString().trim()) && et_email.getText() != null) {
                     newUser.setEmail(et_email.getText().toString());
                 }
